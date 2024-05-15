@@ -1,5 +1,4 @@
-"use client";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import Link from "next/link";
 
 type DataType = {
@@ -9,25 +8,18 @@ type DataType = {
   body: string;
 };
 
-const Posts = () => {
-  const [data, setData] = useState<DataType[]>();
-  useEffect(() => {
-    try {
-      const getData = async () => {
-        const res = await fetch("https://jsonplaceholder.typicode.com/posts");
-        const data = await res.json();
-        if (data.length > 0) {
-          setData(data);
-        }
-      };
-      getData();
-    } catch (error) {
-      console.log(error);
-    }
-  }, []);
+const getData = async () => {
+  const res = await fetch("https://jsonplaceholder.typicode.com/posts");
+  const data = await res.json();
+
+  return data;
+};
+
+const Posts = async () => {
+  const data = await getData();
   return (
     <>
-      {data?.map((info) => {
+      {data?.map((info: DataType) => {
         return (
           <div key={info.id}>
             <Link href={`/posts/${info.id}`}>
