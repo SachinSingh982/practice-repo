@@ -9,7 +9,9 @@ type DataType = {
 };
 
 const getData = async () => {
-  const res = await fetch("https://jsonplaceholder.typicode.com/posts");
+  const res = await fetch("https://jsonplaceholder.typicode.com/posts", {
+    cache: "force-cache",
+  });
   const data = await res.json();
 
   return data;

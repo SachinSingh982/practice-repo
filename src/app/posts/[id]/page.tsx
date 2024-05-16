@@ -1,5 +1,4 @@
-"use client";
-import React, { useEffect, useState } from "react";
+import React from "react";
 
 type DataType = {
   userId: number;
@@ -8,22 +7,14 @@ type DataType = {
   body: string;
 };
 
-const DetailPage: React.FC<{ params: { id: number } }> = ({ params }) => {
-  const [detailInfo, setDetailInfo] = useState<DataType>();
-  useEffect(() => {
-    try {
-      const getDetail = async () => {
-        const res = await fetch(
-          `https://jsonplaceholder.typicode.com/posts/${params.id}`
-        );
-        const data = await res.json();
-        setDetailInfo(data);
-      };
-      getDetail();
-    } catch (error) {
-      console.log(error);
-    }
-  });
+export const getDetailProduct = async (id: number): Promise<DataType> => {
+  const res = await fetch(`https://jsonplaceholder.typicode.com/posts/${id}`);
+  const data = await res.json();
+  return data;
+};
+
+const DetailPage: React.FC<{ params: { id: number } }> = async ({ params }) => {
+  const detailInfo = await getDetailProduct(params.id);
   return (
     <>
       <h1>Title : {detailInfo?.title}</h1>
