@@ -1,4 +1,5 @@
 import React from "react";
+import { fetchPostData } from "../../lib/post";
 
 type DataType = {
   userId: number;
@@ -7,20 +8,23 @@ type DataType = {
   body: string;
 };
 
-export const getDetailProduct = async (id: number): Promise<DataType> => {
-  const res = await fetch(`https://jsonplaceholder.typicode.com/posts/${id}`);
-  const data = await res.json();
-  return data;
-};
-
-const DetailPage: React.FC<{ params: { id: number } }> = async ({ params }) => {
-  const detailInfo = await getDetailProduct(params.id);
+const PostPage: React.FC<{ params: { id: number } }> = async ({ params }) => {
+  const post = await fetchPostData(params.id);
   return (
-    <>
-      <h1>Title : {detailInfo?.title}</h1>
-      <p>Body : {detailInfo?.body}</p>
-    </>
+    <div>
+      <h1>{post.title}</h1>
+      <p>{post.body}</p>
+    </div>
   );
 };
 
-export default DetailPage;
+export default PostPage;
+
+export async function generateStaticParams() {
+  const res = await fetch("https://jsonplaceholder.typicode.com/posts");
+  const posts = await res.json();
+
+  return posts.map((post: DataType) => ({
+    id: post.id.toString(),
+  }));
+}

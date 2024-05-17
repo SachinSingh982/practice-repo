@@ -13,24 +13,21 @@ const getData = async () => {
     cache: "force-cache",
   });
   const data = await res.json();
-
   return data;
 };
 
 const Posts = async () => {
   const data = await getData();
   return (
-    <>
-      {data?.map((info: DataType) => {
-        return (
-          <div key={info.id}>
-            <Link href={`/posts/${info.id}`}>
-              <li>{info.title}</li>
-            </Link>
-          </div>
-        );
-      })}
-    </>
+    <div>
+      <ul>
+        {data?.map((info: DataType) => (
+          <li key={info.id}>
+            <Link href={`/posts/${info.id}`}>{info.title}</Link>
+          </li>
+        ))}
+      </ul>
+    </div>
   );
 };
 
